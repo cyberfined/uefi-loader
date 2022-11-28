@@ -1,0 +1,5 @@
+image/OVMF_CODE.fd
+image/OVMF_VARS.fd
+image/uefi.img
+**/*.o
+src/loader
