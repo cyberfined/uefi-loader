@@ -75,10 +75,11 @@ EfiMemoryDescriptor* get_memory_map(size_t *map_key) {
     EfiMemoryDescriptor *buffer = NULL;
     size_t num_pages = PAGEUP(buffer_size) / PAGE_SIZE;
     buffer_size = num_pages * PAGE_SIZE;
-    err = system_table->boot_services->allocate_pool(
+    err = system_table->boot_services->allocate_pages(
+        AllocateAnyPages,
         EfiLoaderData,
-        buffer_size,
-        (void**)&buffer
+        num_pages,
+        (uint64_t*)&buffer
     );
     if(err != 0)
         handle_error(err);
