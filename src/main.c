@@ -100,8 +100,6 @@ size_t efi_main(EfiHandle _image_handle, EfiSystemTable *_system_table) {
     image_handle = _image_handle;
     system_table = _system_table;
 
-    printf(L"Hello, %s: 0x%x\r\n", L"world", 0xf12);
-
     size_t map_key;
     get_memory_map(&map_key);
     system_table->boot_services->exit_boot_services(image_handle, map_key);

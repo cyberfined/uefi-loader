@@ -1,4 +1,5 @@
 #include "status.h"
+#include "print.h"
 
 #define ERROR_MASK 0x8000000000000000
 
@@ -60,7 +61,7 @@ char16_t *str_status(size_t status) {
     if(status == 0) {
         return L"Success";
     } else if(is_error(status)) {
-        status = (status & !ERROR_MASK) - 1;
+        status = (status & ~ERROR_MASK) - 1;
         if(status < 28)
             return errors[status];
         else if(status < 35)
