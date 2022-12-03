@@ -3,6 +3,7 @@
 #include "types.h"
 #include "table_header.h"
 #include "guid.h"
+#include "memory.h"
 
 #define EFI_OPEN_PROTOCOL_BY_HANDLE 0x1
 
@@ -10,9 +11,15 @@ typedef struct EfiBootServices {
     EfiTableHeader header;
     void           *raise_tpl;
     void           *restore_tpl;
-    void           *allocate_pages;
+    size_t         (*allocate_pages)(EfiAllocateType, EfiMemoryType, size_t, uint64_t*);
     void           *free_pages;
-    void           *get_memory_map;
+    size_t         (*get_memory_map)(
+                       size_t*,
+                       EfiMemoryDescriptor*,
+                       size_t*,
+                       size_t*,
+                       uint32_t*
+                   );
     void           *allocate_pool;
     void           *free_pool;
     void           *create_event;
