@@ -5,6 +5,7 @@
 bool is_error(size_t status);
 bool is_warning(size_t status);
 char16_t *str_status(size_t status);
+size_t error_code(size_t status);
 
 // Errors
 #define EfiLoadError           1

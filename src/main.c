@@ -9,10 +9,11 @@
 #include "status.h"
 
 #define ROUNDUP(x,b) (((unsigned long)x+b-1)&(~(b-1)))
-#define PAGEUP(x) ROUNDUP(x, 4096)
+#define PAGEUP(x) ROUNDUP(x, PAGE_SIZE)
+#define PAGE_SIZE 4096
 
 #define handle_error(err) do { \
-    puts(str_status(err)); \
+    printf(L"Error: %s\r\n", str_status(err)); \
     exit(2); \
 } while(0)
 
@@ -67,17 +68,17 @@ EfiMemoryDescriptor* get_memory_map(size_t *map_key) {
         &descriptor_size,
         &descriptor_version
     );
-    if(err != 0)
+    if(error_code(err) != EfiBufferTooSmall)
         handle_error(err);
 
     puts(L"Allocate memory for memory map buffer");
-    EfiMemoryDescriptor *buffer;
-    buffer_size = PAGEUP(buffer_size) / 4096;
-    err = system_table->boot_services->allocate_pages(
-        AllocateAnyPages,
-        EfiConventionalMemory,
+    EfiMemoryDescriptor *buffer = NULL;
+    size_t num_pages = PAGEUP(buffer_size) / PAGE_SIZE;
+    buffer_size = num_pages * PAGE_SIZE;
+    err = system_table->boot_services->allocate_pool(
+        EfiLoaderData,
         buffer_size,
-        (uint64_t*)&buffer
+        (void**)&buffer
     );
     if(err != 0)
         handle_error(err);

@@ -20,7 +20,7 @@ typedef struct EfiBootServices {
                        size_t*,
                        uint32_t*
                    );
-    void           *allocate_pool;
+    size_t         (*allocate_pool)(EfiMemoryType, size_t, void **buf);
     void           *free_pool;
     void           *create_event;
     void           *set_timer;

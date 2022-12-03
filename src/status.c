@@ -57,6 +57,10 @@ bool is_warning(size_t status) {
     return status != 0 && (status & ERROR_MASK) == 0;
 }
 
+size_t error_code(size_t status) {
+    return status & ~ERROR_MASK;
+}
+
 char16_t *str_status(size_t status) {
     if(status == 0) {
         return L"Success";
